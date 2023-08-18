@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+
+# Dependency logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Distribution directory
+dist/
+
+# System Files
+.DS_Store

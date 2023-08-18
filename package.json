@@ -1,0 +1,32 @@
+{
+  "name": "@maas/magic-timer",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./types": "./dist/index.d.ts"
+  },
+  "scripts": {
+    "start": "pnpm dlx esno ./playground/index.ts",
+    "build": "tsup",
+    "release": "release-it"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "release-it": "^16.1.5",
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "eventemitter3": "^5.0.1"
+  },
+  "peerDependenciesMeta": {
+    "eventemitter3": {
+      "optional": false
+    }
+  }
+}
