@@ -1,4 +1,5 @@
 import { EventEmitter } from 'eventemitter3'
+import { utils } from './utils'
 import {
   type MagicTimerEvent,
   type MagicTimerOptions,
@@ -6,7 +7,6 @@ import {
   Event,
   State,
 } from './types'
-import { utils } from './utils'
 
 const DEFAULT_OPTIONS: MagicTimerOptions = Object.freeze({
   interval: 1000,
