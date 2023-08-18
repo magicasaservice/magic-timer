@@ -1,6 +1,6 @@
 # ⏱️ MagicTimer
 
-> A event based timer for Node.js and the browser.
+> Event based timer for Node.js and the browser.
 
 ## 📦 Install
 
