@@ -5,7 +5,14 @@
 ## 📦 Install
 
 ```bash
+# pnpm
 pnpm install @maas/magic-timer
+
+# npm
+npm install @maas/magic-timer
+
+# yarn
+yarn add @maas/magic-timer
 ```
 
 ## 🚀 Usage
