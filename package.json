@@ -1,5 +1,6 @@
 {
   "name": "@maas/magic-timer",
+  "description": "Event based timer for Node.js and the browser",
   "version": "0.1.0",
   "license": "MIT",
   "exports": {
