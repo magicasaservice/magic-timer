@@ -1,7 +1,6 @@
 {
   "name": "@maas/magic-timer",
   "version": "0.1.0",
-  "private": true,
   "license": "MIT",
   "exports": {
     ".": {
@@ -10,10 +9,14 @@
     },
     "./types": "./dist/index.d.ts"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "pnpm dlx esno ./playground/index.ts",
     "build": "tsup",
-    "release": "release-it"
+    "release": "release-it",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^18",
