@@ -159,7 +159,7 @@ class MagicTimer extends EventEmitter {
   on<T extends string | symbol>(
     event: T,
     fn: (event: MagicTimerEvent) => void,
-    context?: any
+    context?: any,
   ): this {
     return super.on(event, fn, context)
   }
@@ -167,7 +167,7 @@ class MagicTimer extends EventEmitter {
   once<T extends string | symbol>(
     event: T,
     fn: (event: MagicTimerEvent) => void,
-    context?: any
+    context?: any,
   ): this {
     return super.once(event, fn, context)
   }
