@@ -3,6 +3,10 @@
   "description": "Event based timer for Node.js and the browser",
   "version": "0.1.2",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magicasaservice/magic-timer/"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
