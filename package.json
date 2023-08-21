@@ -13,6 +13,8 @@
   "files": [
     "dist"
   ],
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
   "scripts": {
     "start": "pnpm dlx esno ./playground/index.ts",
     "build": "tsup",
