@@ -13,6 +13,9 @@ devDependencies:
   '@types/node':
     specifier: ^18
     version: 18.17.5
+  prettier:
+    specifier: ^3.0.2
+    version: 3.0.2
   release-it:
     specifier: ^16.1.5
     version: 16.1.5
@@ -2408,6 +2411,12 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
+    dev: true
+
+  /prettier@3.0.2:
+    resolution: {integrity: sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /promise.allsettled@1.0.6:

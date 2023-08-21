@@ -5,10 +5,10 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
-    "./types": "./dist/index.d.ts"
+    "./types": "./dist/index.d.mts"
   },
   "files": [
     "dist"
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^18",
+    "prettier": "^3.0.2",
     "release-it": "^16.1.5",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6"
