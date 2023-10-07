@@ -9,16 +9,10 @@ export enum State {
    */
   IDLE = 'idle',
   /**
-   *  Indicates that the timer is in `running` state; such as when the timer is
-   *  started or resumed.
+   *  Indicates that the timer is in `running` state.
    *  @type {String}
    */
   RUNNING = 'running',
-  /**
-   *  Indicates that the timer is in `paused` state.
-   *  @type {String}
-   */
-  PAUSED = 'paused',
   /**
    *  Indicates that the timer is in `stopped` state.
    *  @type {String}
@@ -39,18 +33,7 @@ export enum Event {
    */
   START = 'start',
   /**
-   *  Emitted when the timer is put in `RUNNING` state; such as when the timer is
-   *  resumed.
-   *  @type {String}
-   */
-  RESUME = 'resume',
-  /**
    *  Emitted when the timer is put in `PAUSED` state.
-   *  @type {String}
-   */
-  PAUSE = 'pause',
-  /**
-   *  Emitted when the timer is put in `STOPPED` state.
    *  @type {String}
    */
   STOP = 'stop',

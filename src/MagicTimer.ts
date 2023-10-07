@@ -21,19 +21,14 @@ class MagicTimer extends EventEmitter {
     startTime: number
     stopTime: number
     // below are needed for precise interval. we need to inspect ticks and
-    // elapsed time difference within the latest "continuous" session. in
-    // other words, paused time should be ignored in these calculations. so
-    // we need variables saved after timer is resumed.
+    // elapsed time difference within the latest "continuous" session.
     resumeTime: number
     hrResumeTime: [number, number]
-    tickCountAfterResume: number
   }
 
   private _timeoutRef: any
 
   private _immediateRef: any
-
-  private _runCount: number
 
   // ---------------------------
   // CONSTRUCTOR
@@ -44,7 +39,6 @@ class MagicTimer extends EventEmitter {
 
     this._timeoutRef = null
     this._immediateRef = null
-    this._runCount = 0
     this._reset()
 
     this._.opts = {}
@@ -96,10 +90,6 @@ class MagicTimer extends EventEmitter {
     return this._.tickCount
   }
 
-  get runCount(): number {
-    return this._runCount
-  }
-
   // ---------------------------
   // PUBLIC METHODS
   // ---------------------------
@@ -107,34 +97,10 @@ class MagicTimer extends EventEmitter {
   start(): MagicTimer {
     this._stop()
     this._.state = State.RUNNING
-    this._runCount++
-    this._.tickCount = 0
     this._.stopTime = 0
     this._markTime()
     this._.startTime = Date.now()
     this._emit(Event.START)
-    this._run()
-    return this
-  }
-
-  pause(): MagicTimer {
-    if (this.state !== State.RUNNING) return this
-    this._stop()
-    this._.state = State.PAUSED
-    this._emit(Event.PAUSE)
-    return this
-  }
-
-  resume(): MagicTimer {
-    if (this.state === State.IDLE) {
-      this.start()
-      return this
-    }
-    if (this.state !== State.PAUSED) return this
-    this._runCount++
-    this._markTime()
-    this._.state = State.RUNNING
-    this._emit(Event.RESUME)
     this._run()
     return this
   }
@@ -152,6 +118,15 @@ class MagicTimer extends EventEmitter {
     this._reset()
     this._emit(Event.RESET)
     return this
+  }
+
+  async nextTick(fn: () => void): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        fn()
+        resolve()
+      }, this.interval)
+    })
   }
 
   // Extend EventEmitter 'on' and 'once' methods to accept MagicTimerEvent
@@ -185,7 +160,6 @@ class MagicTimer extends EventEmitter {
   }
 
   private _stop(): void {
-    this._.tickCountAfterResume = 0
     if (this._timeoutRef) {
       clearTimeout(this._timeoutRef)
       this._timeoutRef = null
@@ -205,7 +179,6 @@ class MagicTimer extends EventEmitter {
       stopTime: 0,
       resumeTime: 0,
       hrResumeTime: null,
-      tickCountAfterResume: 0,
     }
     this._stop()
   }
@@ -213,7 +186,6 @@ class MagicTimer extends EventEmitter {
   private _tick(): void {
     this._.state = State.RUNNING
     this._.tickCount++
-    this._.tickCountAfterResume++
     this._emit(Event.TICK)
     this._run()
   }
@@ -228,7 +200,6 @@ class MagicTimer extends EventEmitter {
 
   private _getTimeDiff(): number {
     if (utils.BROWSER) return Date.now() - this._.resumeTime
-
     const hrDiff = process.hrtime(this._.hrResumeTime)
     return Math.ceil(hrDiff[0] * 1000 + hrDiff[1] / 1e6)
   }
@@ -237,13 +208,10 @@ class MagicTimer extends EventEmitter {
     if (this.state !== State.RUNNING) return
 
     let interval = this.interval
-    // we'll get a precise interval by checking if our clock is already
-    // drifted.
+
     if (this.precision) {
       const diff = this._getTimeDiff()
-      // did we reach this expected tick count for the given time period?
-      // calculated count should not be greater than tickCountAfterResume
-      if (Math.floor(diff / interval) > this._.tickCountAfterResume) {
+      if (Math.floor(diff / interval) > this._.tickCount) {
         // if we're really late, run immediately!
         this._immediateRef = utils.setImmediate(() => this._tick())
         return
