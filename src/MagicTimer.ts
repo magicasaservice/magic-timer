@@ -58,7 +58,7 @@ class MagicTimer extends EventEmitter {
     return this._.opts.interval
   }
   set interval(value: number) {
-    this._.opts.interval = utils.getNumber(value, 20, DEFAULT_OPTIONS.interval)
+    this._.opts.interval = utils.getNumber(value, 1, DEFAULT_OPTIONS.interval)
   }
 
   get precision(): boolean {
