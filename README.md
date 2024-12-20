@@ -1,6 +1,6 @@
-# ⏱️ MagicTimer
+# ⏱️ Magic Timer
 
-> Event based timer for Node.js and the browser.
+ A simple event based timer for Node.js and the browser.
 
 ## 📦 Install
 
@@ -28,10 +28,6 @@ timer.on('tick', (time) => {
 
 timer.start()
 ```
-
-## 🧱 Contribute
-
-> Coming soon
 
 ## 🐛 Found a Bug?
 
