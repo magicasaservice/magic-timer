@@ -1,6 +1,6 @@
 # ⏱️ Magic Timer
 
- A simple event based timer for Node.js and the browser.
+ Magic Timer is a simple event based timer that runs on the server as well as the browser.
 
 ## 📦 Install
 
