@@ -26,10 +26,10 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
-    "@types/node": "^18",
+    "@types/node": "^22",
     "prettier": "^3.0.2",
-    "release-it": "^16.1.5",
-    "tsup": "^7.2.0",
+    "release-it": "^18.0.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
