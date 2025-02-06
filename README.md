@@ -1,6 +1,6 @@
 # ⏱️ Magic Timer
 
- A simple event based timer for Node.js and the browser.
+A simple event based timer for Node.js and the browser.
 
 ## 📦 Install
 
@@ -15,7 +15,7 @@ npm install @maas/magic-timer
 yarn add @maas/magic-timer
 ```
 
-## 🚀 Usage
+## 🪄 Use
 
 ```ts
 import { MagicTimer } from '@maas/magic-timer'
@@ -32,4 +32,5 @@ timer.start()
 ## 🐛 Found a Bug?
 
 If you see something that doesn't look right, [submit a bug report](https://github.com/magicasaservice/magic-timer/issues/new?assignees=&labels=bug%2Cpending+triage&template=bug_report.yml).
+
 > See it. Say it. Sorted.
