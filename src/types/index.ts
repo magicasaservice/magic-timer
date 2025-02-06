@@ -1,5 +1,12 @@
 import { MagicTimer } from '../MagicTimer'
 
+/**
+ *  Utility type to require all keys of a given object.
+ */
+export type RequireAll<T> = {
+  [P in keyof T]-?: T[P]
+}
+
 export enum State {
   /**
    *  Indicates that the timer is in `idle` state.

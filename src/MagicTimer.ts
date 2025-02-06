@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3'
 import { utils } from './utils'
 import {
+  type RequireAll,
   type MagicTimerEvent,
   type MagicTimerOptions,
   type TimeInfo,
@@ -8,7 +9,7 @@ import {
   State,
 } from './types'
 
-const DEFAULT_OPTIONS: MagicTimerOptions = Object.freeze({
+const DEFAULT_OPTIONS: RequireAll<MagicTimerOptions> = Object.freeze({
   interval: 1000,
   precision: true,
 })
@@ -23,12 +24,20 @@ class MagicTimer extends EventEmitter {
     // below are needed for precise interval. we need to inspect ticks and
     // elapsed time difference within the latest "continuous" session.
     resumeTime: number
-    hrResumeTime: [number, number]
+    hrResumeTime: [number, number] | null
+  } = {
+    opts: {},
+    state: State.IDLE,
+    tickCount: 0,
+    startTime: 0,
+    stopTime: 0,
+    resumeTime: 0,
+    hrResumeTime: null,
   }
 
-  private _timeoutRef: any
+  private _timeoutRef: unknown
 
-  private _immediateRef: any
+  private _immediateRef: unknown
 
   // ---------------------------
   // CONSTRUCTOR
@@ -43,11 +52,10 @@ class MagicTimer extends EventEmitter {
 
     this._.opts = {}
     const opts =
-      typeof options === 'number'
-        ? { interval: options }
-        : options || ({} as any)
-    this.interval = opts.interval
-    this.precision = opts.precision
+      typeof options === 'number' ? { interval: options } : (options ?? {})
+
+    this.interval = opts.interval ?? DEFAULT_OPTIONS.interval
+    this.precision = opts.precision ?? DEFAULT_OPTIONS.precision
   }
 
   // ---------------------------
@@ -55,14 +63,14 @@ class MagicTimer extends EventEmitter {
   // ---------------------------
 
   get interval(): number {
-    return this._.opts.interval
+    return this._.opts.interval ?? DEFAULT_OPTIONS.interval
   }
   set interval(value: number) {
     this._.opts.interval = utils.getNumber(value, 1, DEFAULT_OPTIONS.interval)
   }
 
   get precision(): boolean {
-    return this._.opts.precision
+    return this._.opts.precision ?? DEFAULT_OPTIONS.precision
   }
   set precision(value: boolean) {
     this._.opts.precision = utils.getBool(value, DEFAULT_OPTIONS.precision)
@@ -106,11 +114,15 @@ class MagicTimer extends EventEmitter {
   }
 
   stop(): MagicTimer {
-    if (this.state !== State.RUNNING) return this
+    if (this.state !== State.RUNNING) {
+      return this
+    }
+
     this._stop()
     this._.stopTime = Date.now()
     this._.state = State.STOPPED
     this._emit(Event.STOP)
+
     return this
   }
 
@@ -134,7 +146,7 @@ class MagicTimer extends EventEmitter {
   on<T extends string | symbol>(
     event: T,
     fn: (event: MagicTimerEvent) => void,
-    context?: any,
+    context?: unknown
   ): this {
     return super.on(event, fn, context)
   }
@@ -142,7 +154,7 @@ class MagicTimer extends EventEmitter {
   once<T extends string | symbol>(
     event: T,
     fn: (event: MagicTimerEvent) => void,
-    context?: any,
+    context?: unknown
   ): this {
     return super.once(event, fn, context)
   }
@@ -160,11 +172,11 @@ class MagicTimer extends EventEmitter {
   }
 
   private _stop(): void {
-    if (this._timeoutRef) {
+    if (this._timeoutRef && typeof this._timeoutRef === 'number') {
       clearTimeout(this._timeoutRef)
       this._timeoutRef = null
     }
-    if (this._immediateRef) {
+    if (this._immediateRef && typeof this._immediateRef === 'number') {
       utils.clearImmediate(this._immediateRef)
       this._immediateRef = null
     }
@@ -172,7 +184,7 @@ class MagicTimer extends EventEmitter {
 
   private _reset(): void {
     this._ = {
-      opts: (this._ || ({} as any)).opts,
+      opts: (this._ || {}).opts,
       state: State.IDLE,
       tickCount: 0,
       startTime: 0,
@@ -198,19 +210,31 @@ class MagicTimer extends EventEmitter {
     }
   }
 
-  private _getTimeDiff(): number {
-    if (utils.BROWSER) return Date.now() - this._.resumeTime
-    const hrDiff = process.hrtime(this._.hrResumeTime)
-    return Math.ceil(hrDiff[0] * 1000 + hrDiff[1] / 1e6)
+  private _getTimeDiff(): number | undefined {
+    if (utils.BROWSER) {
+      return Date.now() - this._.resumeTime
+    }
+
+    if (this._.hrResumeTime) {
+      const hrDiff = process.hrtime(this._.hrResumeTime)
+      return Math.ceil(hrDiff[0] * 1000 + hrDiff[1] / 1e6)
+    }
   }
 
   private _run(): void {
-    if (this.state !== State.RUNNING) return
+    if (this.state !== State.RUNNING) {
+      return
+    }
 
     let interval = this.interval
 
     if (this.precision) {
       const diff = this._getTimeDiff()
+      if (!diff) {
+        console.warn('MagicTimer: Could not calculate time difference.')
+        return
+      }
+
       if (Math.floor(diff / interval) > this._.tickCount) {
         // if we're really late, run immediately!
         this._immediateRef = utils.setImmediate(() => this._tick())

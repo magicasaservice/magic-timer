@@ -22,22 +22,27 @@
   "scripts": {
     "start": "pnpm dlx esno ./playground/index.ts",
     "build": "tsup",
-    "release": "release-it",
-    "prepublishOnly": "pnpm run build"
+    "release": "pnpm run build && release-it",
+    "lint": "eslint .",
+    "uninstall": "pnpm dlx rimraf --glob ./**/node_modules --glob ./**/pnpm-lock.yaml",
+    "update:deps": "pnpm dlx taze -r -w",
+    "update:deps:major": "pnpm dlx taze major -r -w"
   },
   "devDependencies": {
-    "@types/node": "^22",
-    "prettier": "^3.0.2",
-    "release-it": "^18.0.0",
-    "tsup": "^8.3.5",
-    "typescript": "^5.1.6"
+    "@maas/config": "^1.5.0",
+    "@types/node": "^22.13.1",
+    "prettier": "^3.4.2",
+    "release-it": "^18.1.2",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "eventemitter3": "^5.0.1"
+    "eventemitter3": "^5"
   },
   "peerDependenciesMeta": {
     "eventemitter3": {
       "optional": false
     }
-  }
+  },
+  "packageManager": "pnpm@9.15.4"
 }
