@@ -21,8 +21,8 @@ class MagicTimer extends EventEmitter {
     tickCount: number
     startTime: number
     stopTime: number
-    // below are needed for precise interval. we need to inspect ticks and
-    // elapsed time difference within the latest "continuous" session.
+    // Values below are needed for precise intervals.
+    // We need to inspect ticks and elapsed time difference within the latest session.
     resumeTime: number
     hrResumeTime: [number, number] | null
   } = {
@@ -42,7 +42,6 @@ class MagicTimer extends EventEmitter {
   // ---------------------------
   // CONSTRUCTOR
   // ---------------------------
-
   constructor(options?: MagicTimerOptions | number) {
     super()
 
@@ -61,7 +60,6 @@ class MagicTimer extends EventEmitter {
   // ---------------------------
   // GETTERS & SETTERS
   // ---------------------------
-
   get interval(): number {
     return this._.opts.interval ?? DEFAULT_OPTIONS.interval
   }
@@ -101,7 +99,6 @@ class MagicTimer extends EventEmitter {
   // ---------------------------
   // PUBLIC METHODS
   // ---------------------------
-
   start(): MagicTimer {
     this._stop()
     this._.state = State.RUNNING
@@ -142,7 +139,6 @@ class MagicTimer extends EventEmitter {
   }
 
   // Extend EventEmitter 'on' and 'once' methods to accept MagicTimerEvent
-
   on<T extends string | symbol>(
     event: T,
     fn: (event: MagicTimerEvent) => void,
@@ -162,7 +158,6 @@ class MagicTimer extends EventEmitter {
   // ---------------------------
   // PRIVATE  METHODS
   // ---------------------------
-
   private _emit(type: Event): boolean {
     const event: MagicTimerEvent = {
       name: type,
@@ -230,17 +225,17 @@ class MagicTimer extends EventEmitter {
 
     if (this.precision) {
       const diff = this._getTimeDiff()
-      if (!diff) {
+      if (!diff && diff !== 0) {
         console.warn('MagicTimer: Could not calculate time difference.')
         return
       }
 
       if (Math.floor(diff / interval) > this._.tickCount) {
-        // if we're really late, run immediately!
+        // If we’re really late, run immediately!
         this._immediateRef = utils.setImmediate(() => this._tick())
         return
       }
-      // if we still have time but a bit off, update next interval.
+      // If we still have time but are a bit off, update next interval.
       interval = interval - (diff % interval)
     }
 
