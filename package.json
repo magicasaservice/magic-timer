@@ -7,21 +7,15 @@
     "type": "git",
     "url": "https://github.com/magicasaservice/magic-timer/"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./types": "./dist/index.d.mts"
-  },
+  "type": "module",
   "files": [
     "dist"
   ],
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.mts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "start": "pnpm dlx esno ./playground/index.ts",
-    "build": "tsup",
+    "build": "tsdown",
     "release": "pnpm run build && release-it",
     "lint": "eslint .",
     "uninstall": "pnpm dlx rimraf --glob ./**/node_modules --glob ./**/pnpm-lock.yaml",
@@ -29,13 +23,13 @@
     "update:deps:major": "pnpm dlx taze major -r -w"
   },
   "devDependencies": {
-    "@maas/config": "^1.5.0",
-    "@release-it/bumper": "^7.0.1",
-    "@types/node": "^22.13.1",
-    "prettier": "^3.4.2",
-    "release-it": "^18.1.2",
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.3"
+    "@maas/config": "^1.6.0",
+    "@release-it/bumper": "^7.0.5",
+    "@types/node": "^22.15.33",
+    "prettier": "^3.6.1",
+    "release-it": "^19.0.3",
+    "tsdown": "^0.12.9",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "eventemitter3": "^5"
@@ -45,5 +39,5 @@
       "optional": false
     }
   },
-  "packageManager": "pnpm@9.15.4"
+  "packageManager": "pnpm@10.12.3"
 }
